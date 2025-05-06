@@ -14,6 +14,9 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, length = 40)
+    private String taskName;
+
     @Column(nullable = false, length = 150)
     private String description;
 

@@ -20,19 +20,24 @@ import javax.naming.Binding;
 @RequestMapping("/user")
 public class Create {
 
-    private  final CreateService createService;
+    private final CreateService createService;
 
     public Create(CreateService createService) {
         this.createService = createService;
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody @Valid UserDTO userDTO , BindingResult result){
+    public ResponseEntity<String> register(UserDTO userDTO) {
 
-        if(result.hasErrors()){
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build().toString();
+        try {
+            createService.createService(userDTO);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Usuario registrado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao registrar usuario");
         }
-               createService.createService(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build().toString();
     }
 }

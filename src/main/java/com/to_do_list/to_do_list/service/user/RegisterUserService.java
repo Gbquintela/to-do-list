@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
-public class CreateService {
+public class RegisterUserService {
 
 private final UserRepository userRepository;
 
-    public CreateService(UserRepository userRepository) {
+    public RegisterUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User createService(@RequestBody UserDTO userDTO){
+    public User registerService(@RequestBody UserDTO userDTO){
 
         User user = new User();
 
@@ -24,8 +24,6 @@ private final UserRepository userRepository;
         user.setCpf(userDTO.getCpf());
         user.setPassword(userDTO.getPassword());
 
-
         return userRepository.save(user);
-
     }
 }

@@ -18,14 +18,10 @@ public class User {
     @Column(nullable = false, length = 80)
     private String username;
 
-    @Column(nullable = false, length = 14)
+    @Column(nullable = false, unique = true, length = 14)
     private String cpf;
 
     @Column(nullable = false, length = 40)
     private String password;
-
-
-
-
 
 }
