@@ -21,17 +21,17 @@ public class FindByIdController {
     }
 
     @GetMapping("/findTask/{id}")
-    public ResponseEntity<?> findById(Long id){
-        try{
-            Optional<Task> task = findTaskByIdService.findById(id);
-
+    public ResponseEntity<?> findById(Long id) {
+        Optional<Task> task = findTaskByIdService.findById(id);
+        if (task.isPresent()) {
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.FOUND)
                     .body(task);
-        } catch (Exception e){
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Erro ao procurar tarefa pelo id");
         }
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Erro ao procurar tarefa pelo id");
+
     }
 }
