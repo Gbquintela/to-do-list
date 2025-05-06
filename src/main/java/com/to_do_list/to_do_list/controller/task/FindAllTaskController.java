@@ -1,9 +1,8 @@
 package com.to_do_list.to_do_list.controller.task;
 
 
-import com.to_do_list.to_do_list.dto.TaskDTO;
 import com.to_do_list.to_do_list.entity.Task;
-import com.to_do_list.to_do_list.service.task.FindTaskService;
+import com.to_do_list.to_do_list.service.task.FindAllTaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +15,10 @@ import java.util.List;
 @RequestMapping("/task")
 public class FindAllTaskController {
 
-    private final FindTaskService findTaskService;
+    private final FindAllTaskService findAllTaskService;
 
-    public FindAllTaskController(FindTaskService findTaskService) {
-        this.findTaskService = findTaskService;
+    public FindAllTaskController(FindAllTaskService findAllTaskService) {
+        this.findAllTaskService = findAllTaskService;
     }
 
 
@@ -27,7 +26,7 @@ public class FindAllTaskController {
     public ResponseEntity<?> findAllTask(){
         try {
 
-           List<Task> taskList = findTaskService.getAllTask();
+           List<Task> taskList = findAllTaskService.getAllTask();
 
             return  ResponseEntity
                     .status(HttpStatus.OK)
