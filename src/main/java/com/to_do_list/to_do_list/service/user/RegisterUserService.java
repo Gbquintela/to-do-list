@@ -1,4 +1,4 @@
-package com.to_do_list.to_do_list.service.userService;
+package com.to_do_list.to_do_list.service.user;
 
 
 import com.to_do_list.to_do_list.dto.UserDTO;
@@ -20,10 +20,6 @@ private final UserRepository userRepository;
 
         User user = new User();
 
-        user.setUsername(userDTO.getUsername());
-        user.setCpf(userDTO.getCpf());
-        user.setPassword(userDTO.getPassword());
-
-        return userRepository.save(user);
+        return userRepository.save(userDTO.toUser());
     }
 }
