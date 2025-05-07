@@ -35,4 +35,8 @@ public class UpdateTaskService {
 
         return ResponseEntity.notFound().build();
     }
+
+    public Optional<Task> findById(Long id) {
+        return taskRepository.findById(id);
+    }
 }

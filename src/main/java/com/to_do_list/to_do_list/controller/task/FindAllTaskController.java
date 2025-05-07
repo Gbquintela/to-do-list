@@ -22,7 +22,7 @@ public class FindAllTaskController {
     }
 
 
-    @GetMapping("/findAll")
+    @GetMapping("/findAllTask")
     public ResponseEntity<?> findAllTask(){
         try {
 

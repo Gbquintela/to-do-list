@@ -10,11 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/task")
 public class UpdateTaskController {
 
     private final UpdateTaskService updateTaskService;
+
 
 
     public UpdateTaskController(UpdateTaskService updateTaskService) {
@@ -23,16 +26,20 @@ public class UpdateTaskController {
 
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateTask(@PathVariable Long id, TaskDTO taskDTO){
-        try {
+    public ResponseEntity<?> updateTask(@PathVariable Long id, TaskDTO taskDTO){
+        Optional<Task> task = updateTaskService.findById(id);
+        if (task.isPresent()) {
             updateTaskService.updateTask(id, taskDTO);
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Tarefa atualizada com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Erro ao atualizar  a tarefa!");
+                    .status(HttpStatus.FOUND)
+                    .body(task);
         }
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Erro ao procurar tarefa pelo id");
+
     }
-}
+
+    }
+
