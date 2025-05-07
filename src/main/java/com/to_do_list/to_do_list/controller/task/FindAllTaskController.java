@@ -23,26 +23,17 @@ public class FindAllTaskController {
 
 
     @GetMapping("/findAll")
-    public ResponseEntity<?> findAllTask(){
+    public ResponseEntity<?> findAllTask() {
         try {
-
-           List<Task> taskList = findAllTaskService.getAllTask();
-
-            return  ResponseEntity
+            List<Task> taskList = findAllTaskService.getAllTask();
+            return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(taskList);
 
-
-        } catch (Exception e){
-
+        } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Erro ao lista as tarefas!");
-
-
-
         }
-
-
     }
 }

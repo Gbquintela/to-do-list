@@ -30,8 +30,8 @@ public class FindByIdController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Erro ao procurar tarefa pelo id");
+                .status(HttpStatus.NOT_FOUND)
+                .body("Tarefa não localizada!");
 
     }
 }

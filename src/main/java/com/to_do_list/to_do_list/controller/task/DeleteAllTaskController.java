@@ -14,26 +14,22 @@ public class DeleteAllTaskController {
 
     private final DeleteAllTaskService deleteAllTaskService;
 
-
     public DeleteAllTaskController(DeleteAllTaskService deleteAllTaskService) {
         this.deleteAllTaskService = deleteAllTaskService;
     }
 
-
     @DeleteMapping("/delete/all")
-    public ResponseEntity<String> deleteAllTask(){
-
+    public ResponseEntity<String> deleteAllTask() {
         try {
-                deleteAllTaskService.deleteAllTask();
+            deleteAllTaskService.deleteAllTask();
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("Todas as tarefas deletada com sucesso!");
-        } catch (Exception e){
 
+        } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Erro ao deletar as tarefas");
-
         }
     }
 }
