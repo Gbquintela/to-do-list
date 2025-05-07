@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Tarefas - My To-Do List</title>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --primary-hover: #2980b9;
+      --danger-color: #e74c3c;
+      --danger-hover: #c0392b;
+      --success-color: #2ecc71;
+      --warning-color: #f39c12;
+      --gray-color: #ecf0f1;
+      --dark-gray: #95a5a6;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #2c3e50;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .navbar-user {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--gray-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Tasks Grid */
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .task-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .task-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .task-description {
+      color: #7f8c8d;
+      margin: 0 0 1rem 0;
+    }
+
+    .task-status {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-in-progress {
+      background-color: var(--warning-color);
+      color: white;
+    }
+
+    .status-completed {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--dark-gray);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .status-options {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .status-option {
+      flex: 1;
+    }
+
+    .status-option input {
+      display: none;
+    }
+
+    .status-option label {
+      display: block;
+      padding: 0.75rem;
+      text-align: center;
+      border-radius: 4px;
+      background-color: var(--gray-color);
+      cursor: pointer;
+    }
+
+    .status-option input:checked + label {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+    }
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar">
+  <a href="#" class="navbar-brand">My To-Do List</a>
+  <div class="navbar-user">
+    <span>Olá, Usuário!</span>
+    <div class="user-avatar">U</div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="header">
+    <h1>Minhas Tarefas</h1>
+    <button id="createTaskBtn" class="btn btn-primary">+ Criar Tarefa</button>
+  </div>
+
+  <div class="tasks-grid" id="tasksContainer">
+    <!-- Tarefas serão adicionadas aqui via JavaScript -->
+  </div>
+</div>
+
+<!-- Modal para Criar/Editar Tarefa -->
+<div class="modal" id="taskModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Nova Tarefa</h2>
+      <button class="close-btn" id="closeModalBtn">&times;</button>
+    </div>
+
+    <form id="taskForm">
+      <input type="hidden" id="taskId">
+
+      <div class="form-group">
+        <label for="taskName">Nome da Tarefa</label>
+        <input type="text" id="taskName" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="taskDescription">Descrição</label>
+        <textarea id="taskDescription" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <div class="status-options">
+          <div class="status-option">
+            <input type="radio" id="statusInProgress" name="status" value="in-progress" checked>
+            <label for="statusInProgress">Em Andamento</label>
+          </div>
+          <div class="status-option">
+            <input type="radio" id="statusCompleted" name="status" value="completed">
+            <label for="statusCompleted">Completa</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="deleteTaskBtn" class="btn btn-danger" style="display: none;">Deletar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Variáveis globais
+  let tasks = [];
+  let currentTaskId = null;
+
+  // Elementos DOM
+  const tasksContainer = document.getElementById('tasksContainer');
+  const createTaskBtn = document.getElementById('createTaskBtn');
+  const taskModal = document.getElementById('taskModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const modalTitle = document.getElementById('modalTitle');
+  const taskForm = document.getElementById('taskForm');
+  const taskIdInput = document.getElementById('taskId');
+  const taskNameInput = document.getElementById('taskName');
+  const taskDescriptionInput = document.getElementById('taskDescription');
+  const deleteTaskBtn = document.getElementById('deleteTaskBtn');
+
+  // Event Listeners
+  createTaskBtn.addEventListener('click', openCreateModal);
+  closeModalBtn.addEventListener('click', closeModal);
+  taskForm.addEventListener('submit', handleTaskSubmit);
+  deleteTaskBtn.addEventListener('click', handleDeleteTask);
+
+  // Funções
+  function openCreateModal() {
+    currentTaskId = null;
+    modalTitle.textContent = 'Nova Tarefa';
+    taskForm.reset();
+    deleteTaskBtn.style.display = 'none';
+    taskModal.style.display = 'flex';
+  }
+
+  function openEditModal(task) {
+    currentTaskId = task.id;
+    modalTitle.textContent = 'Editar Tarefa';
+    taskIdInput.value = task.id;
+    taskNameInput.value = task.name;
+    taskDescriptionInput.value = task.description;
+
+    if (task.status === 'completed') {
+      document.getElementById('statusCompleted').checked = true;
+    } else {
+      document.getElementById('statusInProgress').checked = true;
+    }
+
+    deleteTaskBtn.style.display = 'block';
+    taskModal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    taskModal.style.display = 'none';
+  }
+
+  function handleTaskSubmit(e) {
+    e.preventDefault();
+
+    const taskData = {
+      id: currentTaskId || Date.now().toString(),
+      name: taskNameInput.value,
+      description: taskDescriptionInput.value,
+      status: document.querySelector('input[name="status"]:checked').value,
+      createdAt: new Date().toISOString()
+    };
+
+    if (currentTaskId) {
+      // Atualizar tarefa existente
+      const index = tasks.findIndex(t => t.id === currentTaskId);
+      if (index !== -1) {
+        tasks[index] = taskData;
+      }
+    } else {
+      // Adicionar nova tarefa
+      tasks.push(taskData);
+    }
+
+    renderTasks();
+    closeModal();
+  }
+
+  function handleDeleteTask() {
+    if (currentTaskId) {
+      tasks = tasks.filter(task => task.id !== currentTaskId);
+      renderTasks();
+      closeModal();
+    }
+  }
+
+  function renderTasks() {
+    tasksContainer.innerHTML = '';
+
+    if (tasks.length === 0) {
+      tasksContainer.innerHTML = '<p>Nenhuma tarefa encontrada. Crie sua primeira tarefa!</p>';
+      return;
+    }
+
+    tasks.forEach(task => {
+      const taskCard = document.createElement('div');
+      taskCard.className = 'task-card';
+      taskCard.innerHTML = `
+                    <h3 class="task-title">${task.name}</h3>
+                    <p class="task-description">${task.description || 'Sem descrição'}</p>
+                    <span class="task-status ${task.status === 'completed' ? 'status-completed' : 'status-in-progress'}">
+                        ${task.status === 'completed' ? 'Completa' : 'Em Andamento'}
+                    </span>
+                `;
+
+      taskCard.addEventListener('click', () => openEditModal(task));
+      tasksContainer.appendChild(taskCard);
+    });
+  }
+
+  // Inicialização
+  renderTasks();
+
+  // Fechar modal ao clicar fora do conteúdo
+  window.addEventListener('click', (e) => {
+    if (e.target === taskModal) {
+      closeModal();
+    }
+  });
+</script>
+</body>
+</html>

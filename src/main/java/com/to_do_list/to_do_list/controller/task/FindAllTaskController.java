@@ -22,8 +22,13 @@ public class FindAllTaskController {
     }
 
 
+<<<<<<< HEAD
+    @GetMapping("/findAllTask")
+    public ResponseEntity<?> findAllTask(){
+=======
     @GetMapping("/findAll")
     public ResponseEntity<?> findAllTask() {
+>>>>>>> aa710a7235c424e38d584ebb4185fb37245b1051
         try {
             List<Task> taskList = findAllTaskService.getAllTask();
             return ResponseEntity
