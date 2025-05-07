@@ -15,31 +15,23 @@ public class DeleteByIdController {
 
     private final DeleteByIdService deleteByIdService;
 
-
     public DeleteByIdController(DeleteByIdService deleteByIdService) {
         this.deleteByIdService = deleteByIdService;
     }
 
-
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id){
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
-        try{
+        try {
             deleteByIdService.deleteById(id);
-            return  ResponseEntity
+            return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("Tarefa Deletada com sucesso!");
 
-        } catch (Exception e){
-
-            return  ResponseEntity
+        } catch (Exception e) {
+            return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Erro ao deleta tarefa pelo id");
-
         }
-
-
     }
-
-
 }

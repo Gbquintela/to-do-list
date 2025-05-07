@@ -2,12 +2,9 @@ package com.to_do_list.to_do_list.controller.task;
 
 
 import com.to_do_list.to_do_list.dto.TaskDTO;
-import com.to_do_list.to_do_list.entity.Task;
-import com.to_do_list.to_do_list.repository.TaskRepository;
 import com.to_do_list.to_do_list.service.task.UpdateTaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
