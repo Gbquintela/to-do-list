@@ -13,25 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/task")
 public class CreateTaskController {
 
-private final CreateTaskService createTaskService;
-
+    private final CreateTaskService createTaskService;
 
     public CreateTaskController(CreateTaskService createTaskService) {
         this.createTaskService = createTaskService;
     }
 
-
     @PostMapping("/create")
-    public ResponseEntity<String> createTask(TaskDTO taskDTO){
+    public ResponseEntity<String> createTask(TaskDTO taskDTO) {
+
         try {
             createTaskService.createService(taskDTO);
-
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body("Tarefa criada com sucesso");
 
-        } catch (Exception e){
-            return  ResponseEntity
+        } catch (Exception e) {
+            return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Erro ao criar a tarefa!");
         }
