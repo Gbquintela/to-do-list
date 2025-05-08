@@ -1,0 +1,140 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="pt-br">
+<script src="/static/JS/ScriptRegisterUser.js" defer></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - My To-Do List</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 350px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .links {
+      margin-top: 20px;
+      font-size: 13px;
+    }
+
+    .links a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>My To-Do List</h1>
+  <p class="subtitle">Organize sua vida em um só lugar</p>
+
+  <form id="registerUserform" th:action="@{/user/registerUser}" method="post">
+  <div class="input-group">
+    <label for="username">Nome de usuário</label>
+    <input type="text" c id="username"  placeholder="seu usuario" required>
+  </div>
+
+  <div class="input-group">
+    <label for="email">E-mail</label>
+    <input type="email"  id="email" placeholder="seu@email.com" required>
+  </div>
+
+  <div class="input-group">
+    <label for="cpf">CPF</label>
+    <input type="text" id="cpf" placeholder="000.000.000-00">
+  </div>
+
+  <div class="input-group">
+    <label for="password">Senha</label>
+    <input type="password" id="password" placeholder="......">
+  </div>
+
+  <div class="input-group">
+    <label for="confirmPassword">Confirme sua senha</label>
+    <input type="password" id="confirmPassword" placeholder="......">
+  </div>
+
+  <button type="submit">Cadastrar</button>
+
+  <div class="links">
+    <a href="#">Já tem uma conta? Faça login</a><br>
+    <a href="#">Esqueceu sua senha?</a>
+  </div>
+  </form>
+</div>
+</body>
+</html>
