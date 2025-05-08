@@ -16,12 +16,9 @@ public class UpdateTaskController {
 
     private final UpdateTaskService updateTaskService;
 
-
-
     public UpdateTaskController(UpdateTaskService updateTaskService) {
         this.updateTaskService = updateTaskService;
     }
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTask(@PathVariable Long id, TaskDTO taskDTO){
@@ -34,10 +31,7 @@ public class UpdateTaskController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Erro ao procurar tarefa pelo id");
-
+                .status(HttpStatus.NOT_FOUND)
+                .body("ID informado não foi encontrado");
     }
-
-    }
-
+}
