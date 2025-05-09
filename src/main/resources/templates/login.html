@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -104,10 +104,10 @@
         <p>Organize sua vida em um só lugar</p>
     </div>
 
-    <form action="/login" method="POST">
+    <form th:action="@{/login/auth}" method="POST">
         <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" required placeholder="seu@email.com">
+            <label for="cpf">CPF</label>
+            <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00">
         </div>
 
         <div class="form-group">
@@ -115,12 +115,11 @@
             <input type="password" id="password" name="password" required placeholder="••••••••">
         </div>
 
-        <button type="submit">Entrar</button>
+        <button type="submit" >Entrar</button>
     </form>
 
     <div class="footer">
         <p>Não tem uma conta? <a href="/user/register">Cadastre-se</a></p>
-        <p><a href="/forgot-password">Esqueceu sua senha?</a></p>
     </div>
 </div>
 </body>

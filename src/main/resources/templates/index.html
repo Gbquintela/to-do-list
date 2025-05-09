@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -251,192 +251,266 @@
       background-color: var(--danger-hover);
     }
   </style>
-</head>
-<body>
-<!-- Navbar -->
-<nav class="navbar">
-  <a href="#" class="navbar-brand">My To-Do List</a>
-  <div class="navbar-user">
-    <span>Olá, Usuário!</span>
-    <div class="user-avatar">U</div>
-  </div>
-</nav>
+  <!DOCTYPE html>
+  <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Tarefas - My To-Do List</title>
+    <style>
+      /* (Mantido igual ao seu CSS original) */
+    </style>
+  </head>
+  <body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="navbar-brand">My To-Do List</a>
+    <div class="navbar-user">
+      <span>Olá, <span id="username">Usuário</span>!</span>
+      <div class="user-avatar">U</div>
+    </div>
+  </nav>
 
-<!-- Main Content -->
-<div class="container">
-  <div class="header">
-    <h1>Minhas Tarefas</h1>
-    <button id="createTaskBtn" class="btn btn-primary">+ Criar Tarefa</button>
-  </div>
-
-  <div class="tasks-grid" id="tasksContainer">
-    <!-- Tarefas serão adicionadas aqui via JavaScript -->
-  </div>
-</div>
-
-<!-- Modal para Criar/Editar Tarefa -->
-<div class="modal" id="taskModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 class="modal-title" id="modalTitle">Nova Tarefa</h2>
-      <button class="close-btn" id="closeModalBtn">&times;</button>
+  <!-- Main Content -->
+  <div class="container">
+    <div class="header">
+      <h1>Minhas Tarefas</h1>
+      <button id="createTaskBtn" class="btn btn-primary">+ Criar Tarefa</button>
+      <button id="deleteAllTasksBtn" class="btn btn-danger">Deletar Todas</button>
     </div>
 
-    <form id="taskForm">
-      <input type="hidden" id="taskId">
+    <div class="tasks-grid" id="tasksContainer">
+      <!-- Tarefas serão carregadas via JavaScript -->
+    </div>
+  </div>
 
-      <div class="form-group">
-        <label for="taskName">Nome da Tarefa</label>
-        <input type="text" id="taskName" class="form-control" required>
+  <!-- Modal para Criar/Editar Tarefa -->
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Nova Tarefa</h2>
+        <button class="close-btn" id="closeModalBtn">&times;</button>
       </div>
 
-      <div class="form-group">
-        <label for="taskDescription">Descrição</label>
-        <textarea id="taskDescription" class="form-control" rows="3"></textarea>
-      </div>
+      <form id="taskForm">
+        <input type="hidden" id="taskId" name="id">
 
-      <div class="form-group">
-        <label>Status</label>
-        <div class="status-options">
-          <div class="status-option">
-            <input type="radio" id="statusInProgress" name="status" value="in-progress" checked>
-            <label for="statusInProgress">Em Andamento</label>
-          </div>
-          <div class="status-option">
-            <input type="radio" id="statusCompleted" name="status" value="completed">
-            <label for="statusCompleted">Completa</label>
+        <div class="form-group">
+          <label for="taskName">Nome da Tarefa</label>
+          <input type="text" id="taskName" name="name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label for="taskDescription">Descrição</label>
+          <textarea id="taskDescription" name="description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <div class="status-options">
+            <div class="status-option">
+              <input type="radio" id="statusInProgress" name="status" value="in-progress" checked>
+              <label for="statusInProgress">Em Andamento</label>
+            </div>
+            <div class="status-option">
+              <input type="radio" id="statusCompleted" name="status" value="completed">
+              <label for="statusCompleted">Completa</label>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button type="button" id="deleteTaskBtn" class="btn btn-danger" style="display: none;">Deletar</button>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-      </div>
-    </form>
+        <div class="modal-footer">
+          <button type="button" id="deleteTaskBtn" class="btn btn-danger">Deletar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<script>
-  // Variáveis globais
-  let tasks = [];
-  let currentTaskId = null;
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos DOM
+      const tasksContainer = document.getElementById('tasksContainer');
+      const createTaskBtn = document.getElementById('createTaskBtn');
+      const deleteAllTasksBtn = document.getElementById('deleteAllTasksBtn');
+      const taskModal = document.getElementById('taskModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const modalTitle = document.getElementById('modalTitle');
+      const taskForm = document.getElementById('taskForm');
+      const taskIdInput = document.getElementById('taskId');
+      const taskNameInput = document.getElementById('taskName');
+      const taskDescriptionInput = document.getElementById('taskDescription');
+      const deleteTaskBtn = document.getElementById('deleteTaskBtn');
 
-  // Elementos DOM
-  const tasksContainer = document.getElementById('tasksContainer');
-  const createTaskBtn = document.getElementById('createTaskBtn');
-  const taskModal = document.getElementById('taskModal');
-  const closeModalBtn = document.getElementById('closeModalBtn');
-  const modalTitle = document.getElementById('modalTitle');
-  const taskForm = document.getElementById('taskForm');
-  const taskIdInput = document.getElementById('taskId');
-  const taskNameInput = document.getElementById('taskName');
-  const taskDescriptionInput = document.getElementById('taskDescription');
-  const deleteTaskBtn = document.getElementById('deleteTaskBtn');
+      // Estado global
+      let currentTaskId = null;
+      let isEditMode = false;
 
-  // Event Listeners
-  createTaskBtn.addEventListener('click', openCreateModal);
-  closeModalBtn.addEventListener('click', closeModal);
-  taskForm.addEventListener('submit', handleTaskSubmit);
-  deleteTaskBtn.addEventListener('click', handleDeleteTask);
+      // Event Listeners
+      createTaskBtn.addEventListener('click', openCreateModal);
+      closeModalBtn.addEventListener('click', closeModal);
+      deleteAllTasksBtn.addEventListener('click', deleteAllTasks);
+      taskForm.addEventListener('submit', handleFormSubmit);
+      deleteTaskBtn.addEventListener('click', deleteCurrentTask);
 
-  // Funções
-  function openCreateModal() {
-    currentTaskId = null;
-    modalTitle.textContent = 'Nova Tarefa';
-    taskForm.reset();
-    deleteTaskBtn.style.display = 'none';
-    taskModal.style.display = 'flex';
-  }
+      // Carrega tarefas ao iniciar
+      fetchTasks();
 
-  function openEditModal(task) {
-    currentTaskId = task.id;
-    modalTitle.textContent = 'Editar Tarefa';
-    taskIdInput.value = task.id;
-    taskNameInput.value = task.name;
-    taskDescriptionInput.value = task.description;
-
-    if (task.status === 'completed') {
-      document.getElementById('statusCompleted').checked = true;
-    } else {
-      document.getElementById('statusInProgress').checked = true;
-    }
-
-    deleteTaskBtn.style.display = 'block';
-    taskModal.style.display = 'flex';
-  }
-
-  function closeModal() {
-    taskModal.style.display = 'none';
-  }
-
-  function handleTaskSubmit(e) {
-    e.preventDefault();
-
-    const taskData = {
-      id: currentTaskId || Date.now().toString(),
-      name: taskNameInput.value,
-      description: taskDescriptionInput.value,
-      status: document.querySelector('input[name="status"]:checked').value,
-      createdAt: new Date().toISOString()
-    };
-
-    if (currentTaskId) {
-      // Atualizar tarefa existente
-      const index = tasks.findIndex(t => t.id === currentTaskId);
-      if (index !== -1) {
-        tasks[index] = taskData;
+      // Funções
+      function fetchTasks() {
+        fetch('/task/findAllTask')
+                .then(response => {
+                  if (!response.ok) throw new Error('Erro ao carregar tarefas');
+                  return response.json();
+                })
+                .then(tasks => {
+                  renderTasks(tasks);
+                })
+                .catch(error => {
+                  console.error('Erro:', error);
+                  alert(error.message);
+                });
       }
-    } else {
-      // Adicionar nova tarefa
-      tasks.push(taskData);
-    }
 
-    renderTasks();
-    closeModal();
-  }
+      function renderTasks(tasks) {
+        tasksContainer.innerHTML = '';
 
-  function handleDeleteTask() {
-    if (currentTaskId) {
-      tasks = tasks.filter(task => task.id !== currentTaskId);
-      renderTasks();
-      closeModal();
-    }
-  }
+        if (!tasks || tasks.length === 0) {
+          tasksContainer.innerHTML = '<p>Nenhuma tarefa encontrada. Crie sua primeira tarefa!</p>';
+          return;
+        }
 
-  function renderTasks() {
-    tasksContainer.innerHTML = '';
+        tasks.forEach(task => {
+          const taskCard = document.createElement('div');
+          taskCard.className = 'task-card';
+          taskCard.dataset.id = task.id;
+          taskCard.innerHTML = `
+                <h3 class="task-title">${task.name || 'Sem nome'}</h3>
+                <p class="task-description">${task.description || 'Sem descrição'}</p>
+                <span class="task-status ${task.status === 'completed' ? 'status-completed' : 'status-in-progress'}">
+                    ${task.status === 'completed' ? 'Completa' : 'Em Andamento'}
+                </span>
+            `;
+          taskCard.addEventListener('click', () => openEditModal(task));
+          tasksContainer.appendChild(taskCard);
+        });
+      }
 
-    if (tasks.length === 0) {
-      tasksContainer.innerHTML = '<p>Nenhuma tarefa encontrada. Crie sua primeira tarefa!</p>';
-      return;
-    }
+      function openCreateModal() {
+        isEditMode = false;
+        currentTaskId = null;
+        modalTitle.textContent = 'Nova Tarefa';
+        taskForm.reset();
+        deleteTaskBtn.style.display = 'none';
+        taskModal.style.display = 'flex';
+      }
 
-    tasks.forEach(task => {
-      const taskCard = document.createElement('div');
-      taskCard.className = 'task-card';
-      taskCard.innerHTML = `
-                    <h3 class="task-title">${task.name}</h3>
-                    <p class="task-description">${task.description || 'Sem descrição'}</p>
-                    <span class="task-status ${task.status === 'completed' ? 'status-completed' : 'status-in-progress'}">
-                        ${task.status === 'completed' ? 'Completa' : 'Em Andamento'}
-                    </span>
-                `;
+      function openEditModal(task) {
+        isEditMode = true;
+        currentTaskId = task.id;
+        modalTitle.textContent = 'Editar Tarefa';
+        taskIdInput.value = task.id;
+        taskNameInput.value = task.name || '';
+        taskDescriptionInput.value = task.description || '';
 
-      taskCard.addEventListener('click', () => openEditModal(task));
-      tasksContainer.appendChild(taskCard);
+        // Define o status correto
+        const statusValue = task.status || 'in-progress';
+        document.querySelector(`input[name="status"][value="${statusValue}"]`).checked = true;
+
+        deleteTaskBtn.style.display = 'block';
+        taskModal.style.display = 'flex';
+      }
+
+      function closeModal() {
+        taskModal.style.display = 'none';
+      }
+
+      function handleFormSubmit(e) {
+        e.preventDefault();
+
+        // Validação básica do front-end
+        if (!taskNameInput.value.trim()) {
+          alert('O nome da tarefa é obrigatório!');
+          return;
+        }
+
+        const formData = {
+          name: taskNameInput.value.trim(),
+          description: taskDescriptionInput.value.trim(),
+          status: document.querySelector('input[name="status"]:checked').value
+        };
+
+        const url = isEditMode ? `/task/update/${currentTaskId}` : '/task/create';
+        const method = isEditMode ? 'PUT' : 'POST';
+
+        fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        })
+                .then(response => {
+                  if (!response.ok) throw new Error('Erro na requisição');
+                  return response.json();
+                })
+                .then(data => {
+                  closeModal();
+                  fetchTasks(); // Recarrega todas as tarefas para garantir consistência
+                  alert(isEditMode ? 'Tarefa atualizada com sucesso!' : 'Tarefa criada com sucesso!');
+                });
+      }
+
+      function deleteCurrentTask() {
+        if (!currentTaskId) return;
+
+        if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
+          fetch(`/task/delete/${currentTaskId}`, {
+            method: 'DELETE'
+          })
+                  .then(response => {
+                    if (response.status === 404) {
+                      throw new Error('Tarefa não encontrada');
+                    }
+                    if (!response.ok) throw new Error('Erro ao deletar tarefa');
+                    closeModal();
+                    fetchTasks();
+                    alert('Tarefa deletada com sucesso!');
+                  })
+                  .catch(error => {
+                    console.error('Erro:', error);
+                    alert(error.message);
+                  });
+        }
+      }
+
+      function deleteAllTasks() {
+        if (confirm('Tem certeza que deseja deletar TODAS as tarefas? Esta ação não pode ser desfeita.')) {
+          fetch('/task/delete/all', {
+            method: 'DELETE'
+          })
+                  .then(response => {
+                    if (!response.ok) throw new Error('Erro ao deletar tarefas');
+                    return response.json();
+                  })
+                  .then(data => {
+                    fetchTasks();
+                    alert(data || 'Todas as tarefas foram deletadas com sucesso!');
+                  })
+                  .catch(error => {
+                    console.error('Erro:', error);
+                    alert(error.message);
+                  });
+        }
+      }
+
+      // Fechar modal ao clicar fora do conteúdo
+      window.addEventListener('click', (e) => {
+        if (e.target === taskModal) {
+          closeModal();
+        }
+      });
     });
-  }
-
-  // Inicialização
-  renderTasks();
-
-  // Fechar modal ao clicar fora do conteúdo
-  window.addEventListener('click', (e) => {
-    if (e.target === taskModal) {
-      closeModal();
-    }
-  });
-</script>
-</body>
-</html>
+  </script>
+  </body>
+  </html>

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -25,4 +27,6 @@ public class User {
     @Column(nullable = false, length = 40)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Task> tasks;
 }

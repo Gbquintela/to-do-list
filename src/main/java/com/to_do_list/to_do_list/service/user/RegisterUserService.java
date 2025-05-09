@@ -17,9 +17,6 @@ private final UserRepository userRepository;
     }
 
     public User registerService(@RequestBody UserDTO userDTO){
-
-        User user = new User();
-
         return userRepository.save(userDTO.toUser());
     }
 }
