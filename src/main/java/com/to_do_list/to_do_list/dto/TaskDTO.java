@@ -17,16 +17,18 @@ public class TaskDTO {
 
     @NotBlank(message = "Descrição deve ser preenchida!")
     @Size(max = 150, message = "Tamanho máximo da descrição é de 150 caracteres!")
-    private String description;
+    private String taskDescription;
 
     @NotBlank(message = "Status deve ser marcado!")
     private StatusTask statusTask;
+
+    private Long userId;
 
     public Task toTask(){
         Task task = new Task();
 
         task.setTaskName(taskName);
-        task.setDescription(description);
+        task.setTaskDescription(taskDescription);
         task.setStatusTask(statusTask);
 
         return task;

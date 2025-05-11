@@ -26,6 +26,8 @@ public class UserDTO {
     @Size(min = 8, max = 40, message = "Número de caracteres inválidos!")
     private String confirmPassword;
 
+    private Long id;
+
     public User toUser(){
         User user = new User();
 

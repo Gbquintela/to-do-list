@@ -20,13 +20,16 @@ public class UpdateTaskService {
         this.taskRepository = taskRepository;
     }
 
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Task> updateTask(
+            @PathVariable Long id,
+            @RequestBody TaskDTO taskDTO
+    ) {
         Optional<Task> taskExists = taskRepository.findById(id);
         if (taskExists.isPresent()) {
             Task task = taskRepository.getReferenceById(id);
 
             task.setTaskName(taskDTO.getTaskName());
-            task.setDescription(taskDTO.getDescription());
+            task.setTaskDescription(taskDTO.getTaskDescription());
             task.setStatusTask(taskDTO.getStatusTask());
 
             Task taskUpdate = taskRepository.save(task);

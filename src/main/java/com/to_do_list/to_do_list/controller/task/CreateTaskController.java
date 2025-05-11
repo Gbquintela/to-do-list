@@ -2,12 +2,12 @@ package com.to_do_list.to_do_list.controller.task;
 
 
 import com.to_do_list.to_do_list.dto.TaskDTO;
+import com.to_do_list.to_do_list.entity.Task;
 import com.to_do_list.to_do_list.service.task.CreateTaskService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/task")
@@ -20,18 +20,20 @@ public class CreateTaskController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createTask(TaskDTO taskDTO) {
+    public ResponseEntity<?> createTask(
+            @RequestBody TaskDTO taskDTO,
+            @RequestParam Long userId) {
 
         try {
-            createTaskService.createService(taskDTO);
+            Task createdTask = createTaskService.createService(taskDTO, userId);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body("Tarefa criada com sucesso");
+                    .body(createdTask);
 
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body("Erro ao criar a tarefa!");
+                    .body("Erro ao criar a tarefa: " + e.getMessage());
         }
     }
 }
