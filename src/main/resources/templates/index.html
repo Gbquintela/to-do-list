@@ -1,5 +1,5 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,6 @@
       color: #2c3e50;
     }
 
-    /* Navbar */
     .navbar {
       background-color: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -58,7 +57,6 @@
       font-weight: bold;
     }
 
-    /* Main Content */
     .container {
       max-width: 1200px;
       margin: 2rem auto;
@@ -91,7 +89,15 @@
       background-color: var(--primary-hover);
     }
 
-    /* Tasks Grid */
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+    }
+
     .tasks-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -141,7 +147,6 @@
       color: white;
     }
 
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -241,276 +246,251 @@
       gap: 1rem;
       margin-top: 2rem;
     }
-
-    .btn-danger {
-      background-color: var(--danger-color);
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background-color: var(--danger-hover);
-    }
   </style>
-  <!DOCTYPE html>
-  <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Tarefas - My To-Do List</title>
-    <style>
-      /* (Mantido igual ao seu CSS original) */
-    </style>
-  </head>
-  <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="#" class="navbar-brand">My To-Do List</a>
-    <div class="navbar-user">
-      <span>Olá, <span id="username">Usuário</span>!</span>
-      <div class="user-avatar">U</div>
-    </div>
-  </nav>
+</head>
+<body>
+<nav class="navbar">
+  <a href="#" class="navbar-brand">My To-Do List</a>
+  <div class="navbar-user">
+    <span>Olá, <span id="username">Usuário</span>!</span>
+    <div class="user-avatar">U</div>
+  </div>
+</nav>
 
-  <!-- Main Content -->
-  <div class="container">
-    <div class="header">
-      <h1>Minhas Tarefas</h1>
-      <button id="createTaskBtn" class="btn btn-primary">+ Criar Tarefa</button>
-      <button id="deleteAllTasksBtn" class="btn btn-danger">Deletar Todas</button>
-    </div>
-
-    <div class="tasks-grid" id="tasksContainer">
-      <!-- Tarefas serão carregadas via JavaScript -->
-    </div>
+<div class="container">
+  <div class="header">
+    <h1>Minhas Tarefas</h1>
+    <button id="createTaskBtn" class="btn btn-primary">+ Criar Tarefa</button>
+    <button id="deleteAllTasksBtn" class="btn btn-danger">Deletar Todas</button>
   </div>
 
-  <!-- Modal para Criar/Editar Tarefa -->
-  <div class="modal" id="taskModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title" id="modalTitle">Nova Tarefa</h2>
-        <button class="close-btn" id="closeModalBtn">&times;</button>
+  <div class="tasks-grid" id="tasksContainer"></div>
+</div>
+
+<div class="modal" id="taskModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Nova Tarefa</h2>
+      <button class="close-btn" id="closeModalBtn">&times;</button>
+    </div>
+
+    <form id="taskForm">
+      <input type="hidden" id="taskId">
+
+      <div class="form-group">
+        <label for="taskName">Nome da Tarefa</label>
+        <input type="text" id="taskName" class="form-control" required minlength="3">
       </div>
 
-      <form id="taskForm">
-        <input type="hidden" id="taskId" name="id">
+      <div class="form-group">
+        <label for="taskDescription">Descrição</label>
+        <textarea id="taskDescription" class="form-control" rows="3"></textarea>
+      </div>
 
-        <div class="form-group">
-          <label for="taskName">Nome da Tarefa</label>
-          <input type="text" id="taskName" name="name" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-          <label for="taskDescription">Descrição</label>
-          <textarea id="taskDescription" name="description" class="form-control" rows="3"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Status</label>
-          <div class="status-options">
-            <div class="status-option">
-              <input type="radio" id="statusInProgress" name="status" value="in-progress" checked>
-              <label for="statusInProgress">Em Andamento</label>
-            </div>
-            <div class="status-option">
-              <input type="radio" id="statusCompleted" name="status" value="completed">
-              <label for="statusCompleted">Completa</label>
-            </div>
+      <div class="form-group">
+        <label>Status</label>
+        <div class="status-options">
+          <div class="status-option">
+            <input type="radio" id="statusInProgress" name="statusTask" value="PROGRESS" checked>
+            <label for="statusInProgress">Em Andamento</label>
+          </div>
+          <div class="status-option">
+            <input type="radio" id="statusCompleted" name="statusTask" value="COMPLETE">
+            <label for="statusCompleted">Completa</label>
           </div>
         </div>
+      </div>
 
-        <div class="modal-footer">
-          <button type="button" id="deleteTaskBtn" class="btn btn-danger">Deletar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-      </form>
-    </div>
+      <div class="modal-footer">
+        <button type="button" id="deleteTaskBtn" class="btn btn-danger" style="display: none;">Deletar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Elementos DOM
-      const tasksContainer = document.getElementById('tasksContainer');
-      const createTaskBtn = document.getElementById('createTaskBtn');
-      const deleteAllTasksBtn = document.getElementById('deleteAllTasksBtn');
-      const taskModal = document.getElementById('taskModal');
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      const modalTitle = document.getElementById('modalTitle');
-      const taskForm = document.getElementById('taskForm');
-      const taskIdInput = document.getElementById('taskId');
-      const taskNameInput = document.getElementById('taskName');
-      const taskDescriptionInput = document.getElementById('taskDescription');
-      const deleteTaskBtn = document.getElementById('deleteTaskBtn');
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Elementos DOM
+    const elements = {
+      tasksContainer: document.getElementById('tasksContainer'),
+      createTaskBtn: document.getElementById('createTaskBtn'),
+      deleteAllTasksBtn: document.getElementById('deleteAllTasksBtn'),
+      taskModal: document.getElementById('taskModal'),
+      closeModalBtn: document.getElementById('closeModalBtn'),
+      modalTitle: document.getElementById('modalTitle'),
+      taskForm: document.getElementById('taskForm'),
+      taskIdInput: document.getElementById('taskId'),
+      taskNameInput: document.getElementById('taskName'),
+      taskDescriptionInput: document.getElementById('taskDescription'),
+      deleteTaskBtn: document.getElementById('deleteTaskBtn')
+    };
 
-      // Estado global
-      let currentTaskId = null;
-      let isEditMode = false;
+    // Estado global
+    const state = {
+      currentTaskId: null,
+      isEditMode: false
+    };
 
-      // Event Listeners
-      createTaskBtn.addEventListener('click', openCreateModal);
-      closeModalBtn.addEventListener('click', closeModal);
-      deleteAllTasksBtn.addEventListener('click', deleteAllTasks);
-      taskForm.addEventListener('submit', handleFormSubmit);
-      deleteTaskBtn.addEventListener('click', deleteCurrentTask);
+    // Configura eventos
+    function setupEventListeners() {
+      elements.createTaskBtn.addEventListener('click', openCreateModal);
+      elements.closeModalBtn.addEventListener('click', closeModal);
+      elements.deleteAllTasksBtn.addEventListener('click', deleteAllTasks);
+      elements.taskForm.addEventListener('submit', handleFormSubmit);
+      elements.deleteTaskBtn.addEventListener('click', deleteCurrentTask);
+      window.addEventListener('click', (e) => e.target === elements.taskModal && closeModal());
+    }
 
-      // Carrega tarefas ao iniciar
-      fetchTasks();
+    // Funções principais
+    async function fetchTasks() {
+      try {
+        const response = await fetch('/task/findAllTask');
+        if (!response.ok) throw new Error('Erro ao carregar tarefas');
+        const tasks = await response.json();
+        renderTasks(tasks);
+      } catch (error) {
+        console.error('Erro:', error);
+        alert(error.message);
+      }
+    }
 
-      // Funções
-      function fetchTasks() {
-        fetch('/task/findAllTask')
-                .then(response => {
-                  if (!response.ok) throw new Error('Erro ao carregar tarefas');
-                  return response.json();
-                })
-                .then(tasks => {
-                  renderTasks(tasks);
-                })
-                .catch(error => {
-                  console.error('Erro:', error);
-                  alert(error.message);
-                });
+    function renderTasks(tasks) {
+      elements.tasksContainer.innerHTML = '';
+
+      if (!tasks || tasks.length === 0) {
+        elements.tasksContainer.innerHTML = '<p>Nenhuma tarefa encontrada. Crie sua primeira tarefa!</p>';
+        return;
       }
 
-      function renderTasks(tasks) {
-        tasksContainer.innerHTML = '';
+      tasks.forEach(task => {
+        const taskCard = document.createElement('div');
+        taskCard.className = 'task-card';
+        taskCard.dataset.id = task.id;
+        taskCard.innerHTML = `
+            <h3 class="task-title">${task.taskName || 'Sem nome'}</h3>
+            <p class="task-description">${task.taskDescription || 'Sem descrição'}</p>
+            <span class="task-status ${task.statusTask === 'COMPLETE' ? 'status-completed' : 'status-in-progress'}">
+              ${task.statusTask === 'COMPLETE' ? 'Completa' : 'Em Andamento'}
+            </span>
+          `;
+        taskCard.addEventListener('click', () => openEditModal(task));
+        elements.tasksContainer.appendChild(taskCard);
+      });
+    }
 
-        if (!tasks || tasks.length === 0) {
-          tasksContainer.innerHTML = '<p>Nenhuma tarefa encontrada. Crie sua primeira tarefa!</p>';
-          return;
-        }
+    function openCreateModal() {
+      state.isEditMode = false;
+      state.currentTaskId = null;
+      elements.modalTitle.textContent = 'Nova Tarefa';
+      elements.taskForm.reset();
+      elements.deleteTaskBtn.style.display = 'none';
+      elements.taskModal.style.display = 'flex';
+    }
 
-        tasks.forEach(task => {
-          const taskCard = document.createElement('div');
-          taskCard.className = 'task-card';
-          taskCard.dataset.id = task.id;
-          taskCard.innerHTML = `
-                <h3 class="task-title">${task.name || 'Sem nome'}</h3>
-                <p class="task-description">${task.description || 'Sem descrição'}</p>
-                <span class="task-status ${task.status === 'completed' ? 'status-completed' : 'status-in-progress'}">
-                    ${task.status === 'completed' ? 'Completa' : 'Em Andamento'}
-                </span>
-            `;
-          taskCard.addEventListener('click', () => openEditModal(task));
-          tasksContainer.appendChild(taskCard);
-        });
-      }
+    function openEditModal(task) {
+      state.isEditMode = true;
+      state.currentTaskId = task.id;
+      elements.modalTitle.textContent = 'Editar Tarefa';
+      elements.taskIdInput.value = task.id;
+      elements.taskNameInput.value = task.taskName || '';
+      elements.taskDescriptionInput.value = task.taskDescription || '';
 
-      function openCreateModal() {
-        isEditMode = false;
-        currentTaskId = null;
-        modalTitle.textContent = 'Nova Tarefa';
-        taskForm.reset();
-        deleteTaskBtn.style.display = 'none';
-        taskModal.style.display = 'flex';
-      }
+      // Define o status correto
+      const statusValue = task.statusTask || 'PROGRESS';
+      document.querySelector(`input[name="statusTask"][value="${statusValue}"]`).checked = true;
 
-      function openEditModal(task) {
-        isEditMode = true;
-        currentTaskId = task.id;
-        modalTitle.textContent = 'Editar Tarefa';
-        taskIdInput.value = task.id;
-        taskNameInput.value = task.name || '';
-        taskDescriptionInput.value = task.description || '';
+      elements.deleteTaskBtn.style.display = 'block';
+      elements.taskModal.style.display = 'flex';
+    }
 
-        // Define o status correto
-        const statusValue = task.status || 'in-progress';
-        document.querySelector(`input[name="status"][value="${statusValue}"]`).checked = true;
+    function closeModal() {
+      elements.taskModal.style.display = 'none';
+    }
 
-        deleteTaskBtn.style.display = 'block';
-        taskModal.style.display = 'flex';
-      }
+    async function handleFormSubmit(e) {
+      e.preventDefault();
 
-      function closeModal() {
-        taskModal.style.display = 'none';
-      }
+      // 1. Definir url e method corretamente
+      const url = state.isEditMode
+              ? `/task/update/${state.currentTaskId}`
+              : '/task/create';
 
-      function handleFormSubmit(e) {
-        e.preventDefault();
+      const method = state.isEditMode ? 'PUT' : 'POST';
 
-        // Validação básica do front-end
-        if (!taskNameInput.value.trim()) {
-          alert('O nome da tarefa é obrigatório!');
-          return;
-        }
+      // 2. Garantir que o status seja enviado corretamente
+      const statusValue = document.querySelector('input[name="statusTask"]:checked')?.value || 'PROGRESS';
 
-        const formData = {
-          name: taskNameInput.value.trim(),
-          description: taskDescriptionInput.value.trim(),
-          status: document.querySelector('input[name="status"]:checked').value
-        };
+      // 3. Criar o objeto de dados com os valores formatados
+      const taskData = {
+        taskName: elements.taskNameInput.value.trim(),
+        taskDescription: elements.taskDescriptionInput.value.trim(),
+        statusTask: statusValue
+      };
 
-        const url = isEditMode ? `/task/update/${currentTaskId}` : '/task/create';
-        const method = isEditMode ? 'PUT' : 'POST';
+      console.log('Enviando dados:', { url, method, taskData }); // Para debug
 
-        fetch(url, {
-          method: method,
+      try {
+        const response = await fetch(url, {
+          method,
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
-          body: JSON.stringify(formData)
-        })
-                .then(response => {
-                  if (!response.ok) throw new Error('Erro na requisição');
-                  return response.json();
-                })
-                .then(data => {
-                  closeModal();
-                  fetchTasks(); // Recarrega todas as tarefas para garantir consistência
-                  alert(isEditMode ? 'Tarefa atualizada com sucesso!' : 'Tarefa criada com sucesso!');
-                });
-      }
+          body: JSON.stringify(taskData)
+        });
 
-      function deleteCurrentTask() {
-        if (!currentTaskId) return;
-
-        if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
-          fetch(`/task/delete/${currentTaskId}`, {
-            method: 'DELETE'
-          })
-                  .then(response => {
-                    if (response.status === 404) {
-                      throw new Error('Tarefa não encontrada');
-                    }
-                    if (!response.ok) throw new Error('Erro ao deletar tarefa');
-                    closeModal();
-                    fetchTasks();
-                    alert('Tarefa deletada com sucesso!');
-                  })
-                  .catch(error => {
-                    console.error('Erro:', error);
-                    alert(error.message);
-                  });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Erro na requisição');
         }
-      }
 
-      function deleteAllTasks() {
-        if (confirm('Tem certeza que deseja deletar TODAS as tarefas? Esta ação não pode ser desfeita.')) {
-          fetch('/task/delete/all', {
-            method: 'DELETE'
-          })
-                  .then(response => {
-                    if (!response.ok) throw new Error('Erro ao deletar tarefas');
-                    return response.json();
-                  })
-                  .then(data => {
-                    fetchTasks();
-                    alert(data || 'Todas as tarefas foram deletadas com sucesso!');
-                  })
-                  .catch(error => {
-                    console.error('Erro:', error);
-                    alert(error.message);
-                  });
-        }
+        closeModal();
+        await fetchTasks();
+        alert(state.isEditMode ? 'Tarefa atualizada!' : 'Tarefa criada!');
+      } catch (error) {
+        console.error('Erro completo:', error);
+        alert(`Erro: ${error.message}`);
       }
+    }
 
-      // Fechar modal ao clicar fora do conteúdo
-      window.addEventListener('click', (e) => {
-        if (e.target === taskModal) {
-          closeModal();
-        }
-      });
-    });
-  </script>
-  </body>
-  </html>
+    async function deleteCurrentTask() {
+      if (!state.currentTaskId || !confirm('Tem certeza que deseja deletar esta tarefa?')) return;
+
+      try {
+        const response = await fetch(`/task/delete/${state.currentTaskId}`, { method: 'DELETE' });
+
+        if (response.status === 404) throw new Error('Tarefa não encontrada');
+        if (!response.ok) throw new Error('Erro ao deletar tarefa');
+
+        closeModal();
+        await fetchTasks();
+        alert('Tarefa deletada com sucesso!');
+      } catch (error) {
+        console.error('Erro:', error);
+        alert(error.message);
+      }
+    }
+
+    async function deleteAllTasks() {
+      if (!confirm('Tem certeza que deseja deletar TODAS as tarefas? Esta ação não pode ser desfeita.')) return;
+
+      try {
+        const response = await fetch('/task/delete/all', { method: 'DELETE' });
+        if (!response.ok) throw new Error('Erro ao deletar tarefas');
+
+        await fetchTasks();
+        alert('Todas as tarefas foram deletadas com sucesso!');
+      } catch (error) {
+        console.error('Erro:', error);
+        alert(error.message);
+      }
+    }
+
+    // Inicialização
+    setupEventListeners();
+    fetchTasks();
+  });
+</script>
+</body>
+</html>

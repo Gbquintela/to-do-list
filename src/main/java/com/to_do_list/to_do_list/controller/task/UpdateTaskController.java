@@ -21,7 +21,10 @@ public class UpdateTaskController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable Long id, TaskDTO taskDTO){
+    public ResponseEntity<?> updateTask(
+            @PathVariable Long id,
+            @RequestBody TaskDTO taskDTO
+    ){
         Optional<Task> task = updateTaskService.findById(id);
         if (task.isPresent()) {
             updateTaskService.updateTask(id, taskDTO);

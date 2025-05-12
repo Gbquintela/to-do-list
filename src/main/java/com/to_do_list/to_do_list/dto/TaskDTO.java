@@ -3,6 +3,7 @@ package com.to_do_list.to_do_list.dto;
 import com.to_do_list.to_do_list.entity.Task;
 import com.to_do_list.to_do_list.enums.StatusTask;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class TaskDTO {
     @Size(max = 150, message = "Tamanho máximo da descrição é de 150 caracteres!")
     private String taskDescription;
 
+    @NotNull
     @NotBlank(message = "Status deve ser marcado!")
     private StatusTask statusTask;
 
@@ -29,7 +31,7 @@ public class TaskDTO {
 
         task.setTaskName(taskName);
         task.setTaskDescription(taskDescription);
-        task.setStatusTask(statusTask);
+        task.setStatusTask(statusTask != null ? statusTask : StatusTask.PROGRESS);
 
         return task;
     }
