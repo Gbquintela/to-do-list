@@ -27,8 +27,8 @@ Vale destacar que nosso foco principal está no backend. O frontend atual é ape
 ### 🔧 Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/MyToDoList.git
-cd MyToDoList
+git clone https://github.com/Gbquintela/to-do-list.git
+cd to-do-list
 ```
 
 Configure seu banco de dados em `src/main/resources/application.properties`:
