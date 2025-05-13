@@ -1,5 +1,5 @@
 
-# 📋 MyToDoList - API de Gerenciamento de Tarefas
+# 📋 ToDoList - API de Gerenciamento de Tarefas
 
 Este projeto foi desenvolvido por @Gbquintela e @ovitudev, com o objetivo de atender à demanda proposta pelo professor Djalma.
 Trata-se de uma API completa para gerenciamento de tarefas com sistema de usuários, desenvolvida utilizando Java 17 e Spring Boot.
